@@ -9,22 +9,33 @@ jobs:
     steps:
       - uses: actions/checkout@v4 # Step 1: Get your code
       
-      - name: Update README
+- name: Update README
         run: |
-          # 1. Create the list of files
-          FILES=$(ls -R)
+          python3 -c "
+          import os
 
-          # 2. Use sed to replace content between markers
-          sed -i "/<!-- AUTO-UPDATE-START -->/,/<!-- AUTO-UPDATE-END -->/c\\<!-- AUTO-UPDATE-START -->\n$FILES\n<!-- AUTO-UPDATE-END -->" README.md
+          # 1. Get the file list
+          # We use os.popen to run the shell command and read its output
+          file_list = os.popen('ls -R').read()
 
-      - name: Update File List
-        run: |
-          echo "## Project Files" > file_list.md
-          ls -R >> file_list.md # Step 2: Run a script to list files
-          
-      - name: Commit changes
-        run: |
-          git config --global user.name 'github-actions'
-          git add .
-          git commit -m "Auto-update file list"
-          git push # Step 3: Push the changes back
+          # 2. Read the current README
+          with open('README.md', 'r') as f:
+              content = f.read()
+
+          # 3. Define our markers
+          start_marker = '<!-- AUTO-UPDATE-START -->'
+          end_marker = '<!-- AUTO-UPDATE-END -->'
+
+          # 4. Create the new content block
+          new_block = f'{start_marker}\n\n{file_list}\n{end_marker}'
+
+          # 5. Replace the old block with the new one
+          # This finds everything between markers and swaps it
+          import re
+          pattern = re.compile(f'{start_marker}.*?{end_marker}', re.DOTALL)
+          updated_content = re.sub(pattern, new_block, content)
+
+          # 6. Write it back to the file
+          with open('README.md', 'w') as f:
+              f.write(updated_content)
+          "
