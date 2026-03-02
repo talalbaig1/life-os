@@ -15,7 +15,7 @@ jobs:
           FILES=$(ls -R)
 
           # 2. Use sed to replace content between markers
-          sed -i "/<!-- AUTO-UPDATE-START -->/,/<!-- AUTO-UPDATE-END -->/c\\<!-- AUTO-UPDATE-START -->\n$LIST\n<!-- AUTO-UPDATE-END -->" README.md
+          sed -i "/<!-- AUTO-UPDATE-START -->/,/<!-- AUTO-UPDATE-END -->/c\\<!-- AUTO-UPDATE-START -->\n$FILES\n<!-- AUTO-UPDATE-END -->" README.md
 
       - name: Update File List
         run: |
