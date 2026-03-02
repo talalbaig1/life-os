@@ -1,0 +1,22 @@
+name: Update README Task List
+on:
+  push:
+    branches: [ master ] # Trigger: When you push to master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # Runner: A fresh Linux VM
+    steps:
+      - uses: actions/checkout@v4 # Step 1: Get your code
+      
+      - name: Update File List
+        run: |
+          echo "## Project Files" > file_list.md
+          ls -R >> file_list.md # Step 2: Run a script to list files
+          
+      - name: Commit changes
+        run: |
+          git config --global user.name 'github-actions'
+          git add .
+          git commit -m "Auto-update file list"
+          git push # Step 3: Push the changes back
