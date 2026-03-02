@@ -9,6 +9,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4 # Step 1: Get your code
       
+      - name: Update README
+        run: |
+          # Create the list of files
+          FILES=$(ls -R)
+          # Use a python or bash trick to replace the content between the markers
+          # For now, let's keep it simple and just append to the file
+          echo "## Automated File List" >> README.md
+          ls -R >> README.md
+
       - name: Update File List
         run: |
           echo "## Project Files" > file_list.md
