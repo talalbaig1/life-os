@@ -11,12 +11,11 @@ jobs:
       
       - name: Update README
         run: |
-          # Create the list of files
+          # 1. Create the list of files
           FILES=$(ls -R)
-          # Use a python or bash trick to replace the content between the markers
-          # For now, let's keep it simple and just append to the file
-          echo "## Automated File List" >> README.md
-          ls -R >> README.md
+
+          # 2. Use sed to replace content between markers
+          sed -i "/<!-- AUTO-UPDATE-START -->/,/<!-- AUTO-UPDATE-END -->/c\\<!-- AUTO-UPDATE-START -->\n$LIST\n<!-- AUTO-UPDATE-END -->" README.md
 
       - name: Update File List
         run: |
